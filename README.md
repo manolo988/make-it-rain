@@ -36,7 +36,7 @@ make-it-rain/
 
 ### Prerequisites
 
-- Go 1.21+
+- Go 1.23+
 - PostgreSQL 15+
 - Docker & Docker Compose (optional)
 
