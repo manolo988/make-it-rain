@@ -26,6 +26,13 @@ func SetupRoutes(r *gin.Engine) {
 			users.PUT("/:id", controllers.UpdateUser)
 			users.DELETE("/:id", controllers.DeleteUser)
 		}
+		jobScheduler := api.Group("/jobs")
+		{
+			jobScheduler.POST("/submit", controllers.SubmitJob)
+			jobScheduler.GET("", controllers.GetJobs)
+			jobScheduler.GET("/:id", controllers.GetJobByID)
+			jobScheduler.POST("/search", controllers.SearchJob)
+		}
 	}
 
 	r.NoRoute(func(c *gin.Context) {
