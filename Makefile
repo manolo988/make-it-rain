@@ -1,4 +1,4 @@
-.PHONY: help run build test clean docker-up docker-down docker-build migrate-up migrate-down migrate-create deps lint fmt air
+.PHONY: help run build test clean docker-up docker-down docker-build migrate-up migrate-down migrate-reset migrate-create deps lint fmt air
 
 APP_NAME=make-it-rain
 DOCKER_COMPOSE=docker-compose
@@ -51,6 +51,13 @@ migrate-up: ## Run database migrations up
 migrate-down: ## Rollback database migrations
 	@echo "Rolling back migrations..."
 	@$(GO) run scripts/migrate.go down 1
+
+migrate-reset: ## Reset database completely (drops all tables and migrations)
+	@echo "⚠️  WARNING: This will DROP ALL TABLES and reset the database completely!"
+	@echo "Press Ctrl+C to cancel, or Enter to continue..."
+	@read confirm
+	@source .env && PGPASSWORD=$$DATABASE_PASSWORD psql -h $$DATABASE_HOST -p $$DATABASE_PORT -U $$DATABASE_USER -d $$DATABASE_NAME -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO $$DATABASE_USER; GRANT ALL ON SCHEMA public TO public;"
+	@echo "✅ Database reset complete. All tables and migrations have been removed."
 
 migrate-create: ## Create a new migration file (usage: make migrate-create NAME=migration_name)
 	@if [ -z "$(NAME)" ]; then echo "Please provide a migration name: make migrate-create NAME=your_migration_name"; exit 1; fi
