@@ -25,6 +25,21 @@ func SetupRoutes(r *gin.Engine) {
 			users.GET("", controllers.GetUsers)
 			users.PUT("/:id", controllers.UpdateUser)
 			users.DELETE("/:id", controllers.DeleteUser)
+
+			// /v1/api/users/id/messages
+			messages := users.Group("/:id/messages")
+			{
+				messages.GET("", controllers.GetUserMessages)
+			}
+		}
+
+		chats := api.Group("/chats")
+		{
+			// /v1/api/chats/create
+			chats.POST("create", controllers.CreateChat)
+			// /v1/api/chats/id/messages/send
+			chats.POST(":id/messages/send", controllers.SendMessage)
+			chats.GET("/:id", controllers.GetChat)
 		}
 	}
 

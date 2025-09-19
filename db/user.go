@@ -4,14 +4,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/manuel/make-it-rain/models"
 )
 
 type CreateUserRequest struct {
-	Email    string `json:"email" binding:"required,email"`
-	Name     string `json:"name" binding:"required"`
+	Email    string `json:"email"    binding:"required,email"`
+	Name     string `json:"name"     binding:"required"`
 	Password string `json:"password" binding:"required,min=8"`
 }
 
@@ -106,7 +107,11 @@ func (s *RealDBService) GetUserByEmail(ctx context.Context, email string) (*User
 	return &u, nil
 }
 
-func (s *RealDBService) GetUsers(ctx context.Context, page, pageSize int, sortBy, sortOrder string) (*PaginatedUsers, error) {
+func (s *RealDBService) GetUsers(
+	ctx context.Context,
+	page, pageSize int,
+	sortBy, sortOrder string,
+) (*PaginatedUsers, error) {
 	countQuery := `SELECT COUNT(*) FROM users`
 	var totalCount int
 	err := Conn.QueryRow(ctx, countQuery).Scan(&totalCount)
@@ -153,7 +158,11 @@ func (s *RealDBService) GetUsers(ctx context.Context, page, pageSize int, sortBy
 	}, nil
 }
 
-func (s *RealDBService) UpdateUser(ctx context.Context, userID int64, updates map[string]interface{}) error {
+func (s *RealDBService) UpdateUser(
+	ctx context.Context,
+	userID int64,
+	updates map[string]interface{},
+) error {
 	if len(updates) == 0 {
 		return nil
 	}
@@ -169,10 +178,10 @@ func (s *RealDBService) UpdateUser(ctx context.Context, userID int64, updates ma
 	}
 
 	query := fmt.Sprintf(`
-		UPDATE users
-		SET %s, updated_at = NOW()
-		WHERE id = $1`,
-		joinStrings(setClauses, ", "))
+        UPDATE users
+        SET %s, updated_at = NOW()
+        WHERE id = $1`,
+		strings.Join(setClauses, ", "))
 
 	result, err := Conn.Exec(ctx, query, args...)
 	if err != nil {
@@ -201,13 +210,4 @@ func (s *RealDBService) DeleteUser(ctx context.Context, userID int64) error {
 	return nil
 }
 
-func joinStrings(strs []string, sep string) string {
-	result := ""
-	for i, s := range strs {
-		if i > 0 {
-			result += sep
-		}
-		result += s
-	}
-	return result
-}
+// removed joinStrings, using strings.Join instead

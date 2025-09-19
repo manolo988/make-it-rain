@@ -7,6 +7,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/manuel/make-it-rain/models"
 )
 
 var Conn *pgxpool.Pool
@@ -14,11 +15,19 @@ var Conn *pgxpool.Pool
 type DBService interface {
 	CreateUser(ctx context.Context, user *CreateUserRequest) (*User, error)
 	GetUser(ctx context.Context, userID int64) (*User, error)
-	GetUsers(ctx context.Context, page, pageSize int, sortBy, sortOrder string) (*PaginatedUsers, error)
+	GetUsers(
+		ctx context.Context,
+		page, pageSize int,
+		sortBy, sortOrder string,
+	) (*PaginatedUsers, error)
 	UpdateUser(ctx context.Context, userID int64, updates map[string]interface{}) error
 	DeleteUser(ctx context.Context, userID int64) error
 	GetUserByEmail(ctx context.Context, email string) (*User, error)
 
+	CreateChat(ctx context.Context, chat *models.CreateChatRequest) (*Chat, error)
+	GetChat(ctx context.Context, chatID int64) (*Chat, error)
+	SendMessage(ctx context.Context, message *models.CreateMessageRequest) (*models.Message, error)
+	GetUserMessages(ctx context.Context, userID int64) ([]Message, error)
 	BeginTx(ctx context.Context) (pgx.Tx, error)
 }
 
