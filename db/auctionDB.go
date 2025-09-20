@@ -21,12 +21,12 @@ func (s *RealDBService) CreateAuction(
 	auction *models.CreateAuctionRequest,
 ) (*models.Auction, error) {
 	query := `
-		INSERT INTO auction (user_id, status, title, description, start_date, end_date, start_price, currency, created_at, updated_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
-		RETURNING id, user_id, status, title, description, start_date, end_date, start_price, currency, created_at, updated_at`
+		INSERT INTO auction (user_id, status, title, description, start_date, end_date, start_price, created_at, updated_at)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
+		RETURNING id, user_id, status, title, description, start_date, end_date, start_price, created_at, updated_at`
 
 	var a Auction
-	err := Conn.QueryRow(ctx, query, auction.UserID, auction.Status, auction.Title, auction.Description, auction.StartDate, auction.EndDate, auction.StartPrice, auction.Currency).
+	err := Conn.QueryRow(ctx, query, auction.UserID, auction.Status, auction.Title, auction.Description, auction.StartDate, auction.EndDate, auction.StartPrice).
 		Scan(
 			&a.ID,
 			&a.UserID,
@@ -36,7 +36,6 @@ func (s *RealDBService) CreateAuction(
 			&a.StartDate,
 			&a.EndDate,
 			&a.StartPrice,
-			&a.Currency,
 			&a.CreatedAt,
 			&a.UpdatedAt,
 		)
@@ -101,7 +100,7 @@ func (s *RealDBService) GetAuctions(
 
 	// Safely construct query with validated inputs
 	query := fmt.Sprintf(`
-		SELECT id, user_id, status, title, description, start_date, end_date, start_price, currency, created_at, updated_at
+		SELECT id, user_id, status, title, description, start_date, end_date, start_price, created_at, updated_at
 		FROM auction
 		ORDER BY %s %s
 		LIMIT $1 OFFSET $2`, sortBy, sortOrder)
@@ -124,7 +123,6 @@ func (s *RealDBService) GetAuctions(
 			&a.StartDate,
 			&a.EndDate,
 			&a.StartPrice,
-			&a.Currency,
 			&a.CreatedAt,
 			&a.UpdatedAt,
 		)
@@ -146,7 +144,7 @@ func (s *RealDBService) GetAuction(
 	ctx context.Context,
 	auctionID int64,
 ) (*models.AuctionResponse, error) {
-	query := `SELECT id, user_id, status, title, description, start_date, end_date, start_price, currency, created_at, updated_at FROM auction WHERE id = $1`
+	query := `SELECT id, user_id, status, title, description, start_date, end_date, start_price, created_at, updated_at FROM auction WHERE id = $1`
 
 	var a models.Auction
 	err := Conn.QueryRow(ctx, query, auctionID).Scan(
@@ -158,7 +156,6 @@ func (s *RealDBService) GetAuction(
 		&a.StartDate,
 		&a.EndDate,
 		&a.StartPrice,
-		&a.Currency,
 		&a.CreatedAt,
 		&a.UpdatedAt,
 	)

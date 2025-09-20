@@ -13,7 +13,6 @@ type Auction struct {
 	StartDate   time.Time `json:"start_date"`
 	EndDate     time.Time `json:"end_date"`
 	StartPrice  int64     `json:"start_price"`
-	Currency    string    `json:"currency"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
@@ -32,7 +31,6 @@ type CreateAuctionRequest struct {
 	StartDate   time.Time `json:"start_date"`
 	EndDate     time.Time `json:"end_date"`
 	StartPrice  int64     `json:"start_price"`
-	Currency    string    `json:"currency"`
 }
 
 type AuctionItem struct {
@@ -56,7 +54,6 @@ type Bid struct {
 	AuctionItemID int64     `json:"auction_item_id"`
 	UserID        int64     `json:"user_id"`
 	Amount        int64     `json:"amount"`
-	Currency      string    `json:"currency"`
 	CreatedAt     time.Time `json:"created_at"`
 	UpdatedAt     time.Time `json:"updated_at"`
 }

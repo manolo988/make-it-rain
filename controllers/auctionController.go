@@ -25,7 +25,9 @@ func CreateAuction(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	if req.Status == "" {
+		req.Status = "active"
+	}
 	auction, err := auctionService.CreateAuction(c.Request.Context(), &req)
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to create auction")

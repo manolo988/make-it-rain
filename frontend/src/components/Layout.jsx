@@ -20,14 +20,14 @@ const Layout = () => {
               </div>
               <div className="hidden sm:ml-8 sm:flex sm:space-x-6">
                 <Link
-                  to="/"
+                  to="/auctions"
                   className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-300 ${
-                    isActive('/')
+                    location.pathname.startsWith('/auctions')
                       ? 'border-rain-pink text-rain-pink'
                       : 'border-transparent text-gray-400 hover:text-white hover:border-rain-pink/50'
                   }`}
                 >
-                  Dashboard
+                  Auctions
                 </Link>
                 <Link
                   to="/users"
