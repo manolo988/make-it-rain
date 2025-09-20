@@ -143,3 +143,83 @@ curl -X POST localhost:8080/api/v1/users \
 - Remember to handle pagination limits
 - Always validate/sanitize user input
 - Use transactions for multi-step operations
+
+## Frontend Quick Reference
+
+### Tech Stack
+- **Build**: Vite
+- **Framework**: React/Vue/Svelte (choose based on interview)
+- **API**: Fetch/Axios to `VITE_API_URL` (localhost:8080/api/v1)
+
+### Directory Structure
+```
+frontend/
+├── src/
+│   ├── components/      # UI components
+│   ├── hooks/          # Custom React hooks
+│   ├── services/       # API calls
+│   ├── utils/          # Helpers
+│   └── App.tsx         # Main component
+```
+
+### Implementation Pattern
+**IMPORTANT**: Always reference BE models/endpoints when implementing FE. Never modify BE to conform to FE.
+
+1. **Check BE first**: Review models/ and routes/routes.go for available endpoints
+2. **Create API service**: Match exact BE endpoints and payloads
+3. **Build component**: Use BE model structure for state/props
+
+### API Integration Example
+```typescript
+// services/userService.ts - Match BE endpoints exactly
+const API_URL = import.meta.env.VITE_API_URL;
+
+export const userService = {
+  // GET /api/v1/users
+  getUsers: (page = 1, pageSize = 10) =>
+    fetch(`${API_URL}/users?page=${page}&page_size=${pageSize}`),
+
+  // POST /api/v1/users - Match models/user.go fields
+  createUser: (data: {email: string, name: string, password: string}) =>
+    fetch(`${API_URL}/users`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    })
+};
+```
+
+### Component Example
+```tsx
+// components/UserList.tsx - Use BE model structure
+interface User {
+  id: number;          // Match models/user.go
+  email: string;
+  name: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+```
+
+### Frontend Commands
+```bash
+cd frontend
+npm install          # Install dependencies
+npm run dev          # Start dev server (port 5173)
+npm run build        # Production build
+```
+
+### Interview Tips for FE
+1. **Always check BE first** - Look at models/ and controllers/ before implementing
+2. **Use exact field names** - `is_active` not `isActive`, `created_at` not `createdAt`
+3. **Reference BE validation** - Check controller bindings for required fields
+4. **Test with BE running** - Ensure `make run` is active on port 8080
+5. **CORS is handled** - Middleware already configured in BE
+
+### Quick Component Creation
+1. Check BE endpoint: `grep -r "router\." routes/`
+2. Check model fields: `cat models/[resource].go`
+3. Create service matching BE exactly
+4. Build component using BE field names
+5. Test integration with running BE
