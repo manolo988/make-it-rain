@@ -1,4 +1,4 @@
-.PHONY: help run build test clean docker-up docker-down docker-build migrate-up migrate-down migrate-reset migrate-create deps lint fmt air
+.PHONY: help run build test clean docker-up docker-down docker-build migrate-up migrate-down migrate-reset migrate-force migrate-fix-dirty migrate-create deps lint fmt air frontend-install frontend-dev frontend-build dev
 
 APP_NAME=make-it-rain
 DOCKER_COMPOSE=docker-compose
@@ -59,6 +59,22 @@ migrate-reset: ## Reset database completely (drops all tables and migrations)
 	@source .env && PGPASSWORD=$$DATABASE_PASSWORD psql -h $$DATABASE_HOST -p $$DATABASE_PORT -U $$DATABASE_USER -d $$DATABASE_NAME -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO $$DATABASE_USER; GRANT ALL ON SCHEMA public TO public;"
 	@echo "✅ Database reset complete. All tables and migrations have been removed."
 
+migrate-force: ## Force migration version and clear dirty flag (usage: make migrate-force VERSION=123456)
+	@if [ -z "$(VERSION)" ]; then echo "Please provide a version: make migrate-force VERSION=<version_number>"; exit 1; fi
+	@echo "Forcing migration version to $(VERSION) and clearing dirty flag..."
+	@$(GO) run scripts/migrate.go force $(VERSION)
+
+migrate-fix-dirty: ## Manually fix dirty migration flag in database
+	@echo "⚠️  This will manually clear the dirty flag in the schema_migrations table"
+	@echo "Current migration status:"
+	@source .env && PGPASSWORD=$$DATABASE_PASSWORD psql -h $$DATABASE_HOST -p $$DATABASE_PORT -U $$DATABASE_USER -d $$DATABASE_NAME -t -c "SELECT version, dirty FROM schema_migrations;" || echo "No migrations table found"
+	@echo ""
+	@echo "To clear the dirty flag, press Enter. To cancel, press Ctrl+C"
+	@read confirm
+	@source .env && PGPASSWORD=$$DATABASE_PASSWORD psql -h $$DATABASE_HOST -p $$DATABASE_PORT -U $$DATABASE_USER -d $$DATABASE_NAME -c "UPDATE schema_migrations SET dirty = false;" && echo "✅ Dirty flag cleared successfully"
+	@echo "New migration status:"
+	@source .env && PGPASSWORD=$$DATABASE_PASSWORD psql -h $$DATABASE_HOST -p $$DATABASE_PORT -U $$DATABASE_USER -d $$DATABASE_NAME -t -c "SELECT version, dirty FROM schema_migrations;"
+
 migrate-create: ## Create a new migration file (usage: make migrate-create NAME=migration_name)
 	@if [ -z "$(NAME)" ]; then echo "Please provide a migration name: make migrate-create NAME=your_migration_name"; exit 1; fi
 	@touch db/migrations/$$(date +%s)_$(NAME).up.sql
@@ -108,3 +124,28 @@ logs: ## Show application logs
 
 logs-db: ## Show database logs
 	$(DOCKER_COMPOSE) logs -f postgres
+
+frontend-install: ## Install frontend dependencies
+	cd frontend && npm install
+
+frontend-dev: ## Run frontend development server
+	cd frontend && npm run dev
+
+frontend-build: ## Build frontend for production
+	cd frontend && npm run build
+
+frontend-clean: ## Clean frontend build files
+	rm -rf frontend/dist frontend/node_modules
+
+dev: ## Run both backend and frontend in development mode (requires two terminals)
+	@echo "Starting backend and frontend servers..."
+	@echo "Backend will run on http://localhost:8080"
+	@echo "Frontend will run on http://localhost:3000"
+	@echo ""
+	@echo "Run these commands in separate terminals:"
+	@echo "  make air        # Backend with hot reload"
+	@echo "  make frontend-dev  # Frontend with hot reload"
+
+full-build: build frontend-build ## Build both backend and frontend for production
+
+full-clean: clean frontend-clean ## Clean both backend and frontend build files

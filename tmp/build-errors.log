@@ -1,0 +1,30 @@
+panic: unsupported version: 2
+
+goroutine 371 [running]:
+golang.org/x/tools/internal/pkgbits.NewPkgDecoder({0x140007b5ef0, 0x15}, {0x14001247300, 0x113e})
+	/Users/manuel/go/pkg/mod/golang.org/x/tools@v0.6.0/internal/pkgbits/decoder.go:87 +0x3e8
+golang.org/x/tools/internal/gcimporter.UImportData(0x101a55060?, 0x140006944b0?, {0x14001246001?, 0xa5c4?, 0x129ec9ea8?}, {0x140007b5ef0, 0x15})
+	/Users/manuel/go/pkg/mod/golang.org/x/tools@v0.6.0/internal/gcimporter/ureader_yes.go:67 +0x7c
+golang.org/x/tools/go/gcexportdata.Read({0x101a55060?, 0x140006944b0?}, 0x0?, 0xc?, {0x140007b5ef0, 0x15})
+	/Users/manuel/go/pkg/mod/golang.org/x/tools@v0.6.0/go/gcexportdata/gcexportdata.go:140 +0x204
+github.com/golangci/golangci-lint/pkg/golinters/goanalysis.(*loadingPackage).loadFromExportData(0x140007b36e0?)
+	/Users/manuel/go/pkg/mod/github.com/golangci/golangci-lint@v1.51.2/pkg/golinters/goanalysis/runner_loadingpackage.go:221 +0x230
+github.com/golangci/golangci-lint/pkg/golinters/goanalysis.(*loadingPackage).loadImportedPackageWithFacts(0x140007b36e0, 0x2)
+	/Users/manuel/go/pkg/mod/github.com/golangci/golangci-lint@v1.51.2/pkg/golinters/goanalysis/runner_loadingpackage.go:272 +0x38
+github.com/golangci/golangci-lint/pkg/golinters/goanalysis.(*loadingPackage).loadWithFacts(0x75626f746f72702e?, 0x7463757274532e66?)
+	/Users/manuel/go/pkg/mod/github.com/golangci/golangci-lint@v1.51.2/pkg/golinters/goanalysis/runner_loadingpackage.go:264 +0x134
+github.com/golangci/golangci-lint/pkg/golinters/goanalysis.(*loadingPackage).analyze(0x140007b36e0, 0x2, 0x1400101f320)
+	/Users/manuel/go/pkg/mod/github.com/golangci/golangci-lint@v1.51.2/pkg/golinters/goanalysis/runner_loadingpackage.go:61 +0xac
+github.com/golangci/golangci-lint/pkg/golinters/goanalysis.(*loadingPackage).analyzeRecursive.func1()
+	/Users/manuel/go/pkg/mod/github.com/golangci/golangci-lint@v1.51.2/pkg/golinters/goanalysis/runner_loadingpackage.go:48 +0x184
+sync.(*Once).doSlow(0x726f746f72702020?, 0x462e7463656c6665?)
+	/usr/local/go/src/sync/once.go:74 +0x100
+sync.(*Once).Do(...)
+	/usr/local/go/src/sync/once.go:65
+github.com/golangci/golangci-lint/pkg/golinters/goanalysis.(*loadingPackage).analyzeRecursive(0x7270207265626d75?, 0x656c6665726f746f?, 0x646c6569462e7463?)
+	/Users/manuel/go/pkg/mod/github.com/golangci/golangci-lint@v1.51.2/pkg/golinters/goanalysis/runner_loadingpackage.go:37 +0x54
+github.com/golangci/golangci-lint/pkg/golinters/goanalysis.(*loadingPackage).analyzeRecursive.func1.1(0x6c676f6f6720726f?)
+	/Users/manuel/go/pkg/mod/github.com/golangci/golangci-lint@v1.51.2/pkg/golinters/goanalysis/runner_loadingpackage.go:43 +0x2c
+created by github.com/golangci/golangci-lint/pkg/golinters/goanalysis.(*loadingPackage).analyzeRecursive.func1
+	/Users/manuel/go/pkg/mod/github.com/golangci/golangci-lint@v1.51.2/pkg/golinters/goanalysis/runner_loadingpackage.go:42 +0x9c
+exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1exit status 1

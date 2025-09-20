@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --swatch-pink: #ff0080;
+    --swatch-white: #ffffff;
+  }
+
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--swatch-pink);
+    color: var(--swatch-white);
+  }
+
+  body {
+    @apply bg-rain-black text-white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  input, textarea {
+    @apply bg-rain-gray-dark border-rain-gray-border;
+  }
+
+  input:focus, textarea:focus {
+    @apply outline-none ring-2 ring-rain-pink ring-opacity-50;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-rain-gray-dark/50 backdrop-blur-md border border-rain-gray-border;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-rain text-white font-medium px-4 py-2 rounded-md
+           transition-all duration-300 hover:shadow-lg hover:shadow-rain-pink/30
+           hover:scale-105 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-rain-gray-medium text-white font-medium px-4 py-2 rounded-md
+           border border-rain-gray-border transition-all duration-300
+           hover:bg-rain-gray-light hover:border-rain-pink/50;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl
+           hover:shadow-rain-pink/10 hover:border-rain-pink/30 hover:scale-[1.02];
+  }
+}

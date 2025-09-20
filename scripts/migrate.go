@@ -55,7 +55,20 @@ func main() {
 		}
 		fmt.Printf("Rolled back %d migration(s) successfully\n", steps)
 
+	case "force":
+		if len(os.Args) < 3 {
+			log.Fatal("Usage: go run migrate.go force <version>")
+		}
+		version, err := strconv.Atoi(os.Args[2])
+		if err != nil {
+			log.Fatalf("Invalid version number: %v", err)
+		}
+		if err := db.ForceMigrationVersion(databaseURL, version); err != nil {
+			log.Fatalf("Failed to force migration version: %v", err)
+		}
+		fmt.Printf("Forced migration version to %d and cleared dirty flag\n", version)
+
 	default:
-		log.Fatal("Unknown command. Use 'up' or 'down'")
+		log.Fatal("Unknown command. Use 'up', 'down', or 'force'")
 	}
 }

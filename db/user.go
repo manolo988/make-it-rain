@@ -10,8 +10,8 @@ import (
 )
 
 type CreateUserRequest struct {
-	Email    string `json:"email" binding:"required,email"`
-	Name     string `json:"name" binding:"required"`
+	Email    string `json:"email"    binding:"required,email"`
+	Name     string `json:"name"     binding:"required"`
 	Password string `json:"password" binding:"required,min=8"`
 }
 
@@ -106,7 +106,11 @@ func (s *RealDBService) GetUserByEmail(ctx context.Context, email string) (*User
 	return &u, nil
 }
 
-func (s *RealDBService) GetUsers(ctx context.Context, page, pageSize int, sortBy, sortOrder string) (*PaginatedUsers, error) {
+func (s *RealDBService) GetUsers(
+	ctx context.Context,
+	page, pageSize int,
+	sortBy, sortOrder string,
+) (*PaginatedUsers, error) {
 	countQuery := `SELECT COUNT(*) FROM users`
 	var totalCount int
 	err := Conn.QueryRow(ctx, countQuery).Scan(&totalCount)
@@ -153,7 +157,11 @@ func (s *RealDBService) GetUsers(ctx context.Context, page, pageSize int, sortBy
 	}, nil
 }
 
-func (s *RealDBService) UpdateUser(ctx context.Context, userID int64, updates map[string]interface{}) error {
+func (s *RealDBService) UpdateUser(
+	ctx context.Context,
+	userID int64,
+	updates map[string]interface{},
+) error {
 	if len(updates) == 0 {
 		return nil
 	}

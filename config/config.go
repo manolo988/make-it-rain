@@ -42,9 +42,9 @@ type JWTConfig struct {
 }
 
 type AppConfig struct {
-	Name        string `mapstructure:"name"`
-	Version     string `mapstructure:"version"`
-	LogLevel    string `mapstructure:"log_level"`
+	Name         string `mapstructure:"name"`
+	Version      string `mapstructure:"version"`
+	LogLevel     string `mapstructure:"log_level"`
 	RateLimitRPS int    `mapstructure:"rate_limit_rps"`
 }
 
