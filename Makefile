@@ -1,4 +1,4 @@
-.PHONY: help run build test clean docker-up docker-down docker-build migrate-up migrate-down migrate-reset migrate-create deps lint fmt air
+.PHONY: help run build test clean docker-up docker-down docker-build migrate-up migrate-down migrate-reset migrate-create deps lint fmt air frontend frontend-build frontend-preview
 
 APP_NAME=make-it-rain
 DOCKER_COMPOSE=docker-compose
@@ -108,3 +108,15 @@ logs: ## Show application logs
 
 logs-db: ## Show database logs
 	$(DOCKER_COMPOSE) logs -f postgres
+
+frontend: ## Run frontend development server
+	@echo "Starting frontend development server..."
+	cd frontend && npm install && npm run dev
+
+frontend-build: ## Build frontend for production
+	@echo "Building frontend for production..."
+	cd frontend && npm install && npm run build
+
+frontend-preview: ## Preview frontend production build
+	@echo "Starting frontend preview server..."
+	cd frontend && npm run preview

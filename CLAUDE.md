@@ -206,7 +206,7 @@ interface User {
 ```bash
 cd frontend
 npm install          # Install dependencies
-npm run dev          # Start dev server (port 5173)
+npm run dev          # Start dev server (port 3000)
 npm run build        # Production build
 ```
 
